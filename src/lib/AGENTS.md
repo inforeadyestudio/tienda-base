@@ -1,0 +1,6 @@
+- B2B CAD uses orders.billing_currency (not currency) to keep USD triggers intact.
+- Storefront app_settings reads use readAppSetting (public-settings.ts) to batch page-load reads; sales rank comes from getSalesRank server fn, never the browser.
+- Browsing analytics events batch via /api/public/analytics/batch (rules in analytics-batch.js); checkout/purchase events insert immediately so funnels never lose payment steps.
+- Cart adds go through addToCart (cart.ts), which checks live stock via checkVariantStock + canAddToCart (on_hand − reserved) before adding; checkout opening clears the settings batch so totals use fresh settings.
+- R Wear dispatches never send R-Count adjustments; R Wear syncs OPs itself.
+- R-Count box invoices reserve their own consecutive and boxes >1 use order number -C<n>; R-Count dedupes by order number.

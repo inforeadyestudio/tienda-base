@@ -1,0 +1,63 @@
+- Sidebars: viewport height, scroll nav, sign-out. Storefront order: published page-tienda catalog-order.
+- Key products by slug/current color; revalidate on entry, not polling, to avoid stale sizes.
+- Subdirectories have their own AGENTS.md; read before editing there.
+- Billing uses `/api/public/hooks/order-billing`; all channels go through R-Count Colombia, and pending invoices reconcile from R-Count because DIAN callbacks can be missed.
+- Web stock cascades Ecommerce → lending stores (schedule/safety stock via web_lending); reserve_stock saves fulfill_location_id; protect store display stock.
+- Copy try-on results to private user storage and sign paths for display; provider URLs expire.
+- R Wear cut-curve uses authenticated webhook + transactional event_id function; update Quality A atomically without stock changes/replays.
+- B2B: saved totals, HS codes, box customs values; R-Count records commercial/customs choice. Keep billing/shipping addresses separate.
+- R-Count receives `facturas_venta` only, with numeric operation_center_code 1–5; it costs stock per invoice.
+- R-Count resolves the payment provider from the referenced payment attempt before mapping generic or legacy Wompi labels, so gateway-specific accounting stays accurate.
+- Shopify imports use unique shopify_id, server-side auth, idempotent re-imports and email-less CRM rows.
+- POS returns preserve Calidad C/returned_qty and consume credits atomically. Legacy notes stay separate: service-only receipt after DIAN approval prevents fake sales/replays.
+- Lists: fetchAll(1000), pages 50; abandonment end refreshes. Backups retain saved items and payment/delivery states for history.
+- Photos: shared 1920px WebP 78%; preserve videos, gallery order and originals. Garment covers: public product-media + cover_url.
+- Catalog thumbnails use ProductPhoto with layout-aware responsive sizes and near-viewport loading to prioritize visible media; preserve original fallback and full-resolution product sources.
+- Shop entry prefetches catalog and editorial content independently; bound public catalog reads and surface retryable failures without browser database fallback so fresh visitors never depend on saved catalog data.
+- Server caches never share in-flight promises across requests or leave work running after the response; Workers cancel that I/O and later visitors hang, so refreshes run inside the requesting call with time limits.
+- Product videos use -1 for cover and 0 for slot two; approved review media uses expiring signed URLs.
+- Admin/POS staff gates use cached beforeLoad validation to avoid loaders and mount only authorized content.
+- Scroll videos use CDN WebP canvas (ScrollFrames + scroll-frames.json, desktop/mobile), with seeking fallback; iOS seeking freezes.
+- Edge geo gate passes unknowns; B2B emails use DB hooks. Locale: CO/PA es/COP, others en/USD; PA zone shipping converts to COP to keep destination and currency distinct.
+- Loyalty uses registered account IDs across POS/checkout, including staff, to share one balance.
+- Restock (b2b_mode='restock'): create_b2b_restock_order reserves Ecommerce, confirm_restock_payment confirms, dispatch_b2b_shipment deducts. Preventa stays separate.
+- B2B order adjustments add variants atomically through add_b2b_order_item with an explicit source location; Restock reserves physical stock per item location, while Preventa consumes the selected location's configured quota.
+- Force storefront light mode at the root; hide the theme switch so saved dark preferences cannot obscure product text.
+- Gateways save snapshots before URLs. Token-locked retries reuse order, points and stock; pending attempts resume, changed terms block. Claim initiation once; lock paid finalization to prevent duplicates. PSE/ambiguous stays pending.
+- Bold online uses separate credentials/SDK from POS to prevent cross-channel confirmation. Guest preparation applies codes in draft, validates totals, then reserves atomically. Signed events require exact original currency/amount; unverified USD conversions stay pending.
+- Admin online-order payment labels resolve the actual gateway from payment_attempts by payment_reference; orders.payment_method may only say card. Both admin menus share one badge count query (paid ecommerce orders not yet shipped).
+- Order customer display preserves the order snapshot, accepts legacy identification, and fills missing shipping fields only from non-billing saved addresses; use existing team RLS rather than broadening customer access.
+- Manual orders deduct stock at creation (create_manual_order_stock), restored once on cancel; Kardex credits the creator.
+- Skydropx uses carrier_settings.skydropx.origins[location_id] with origin fallback and per-guide dimensions. B2B boxes have one location, independent guide/billing checks, scoped invoices and reconcile accepted sends to avoid duplicates.
+- Quote and label share shipping-origin resolution: box/scoped location, dispatch location, then unique item location; reject ambiguous or unassigned origins rather than silently using the general address.
+- Shipping label operations share the server-validated shipping-access guard for admins, bodega and jefe_tiendas; credential/configuration actions stay admin-only to avoid granting financial or integration administration access.
+- Paid online orders never stay draft; fallback reserves Ecommerce and flags needs_stock; availability uses webSellable.
+- `/` and `/home` use the home selected in `storefront_home`.
+- Import qrcode dynamically via `qrcode/lib/browser`; Node build crashes edge.
+- Credit badges use payment_status, not legacy paid_at, which may mean authorization.
+- Enqueue manual credit billing when confirmed orders enter preparation; retain credit terms and skip accepted invoices on settlement to prevent duplicates.
+- Meta reports: admin-authenticated, cursor-paginated, 15-minute cache; separate UTM sessions from Meta purchases.
+- Normalize portal RPC JSON/object rows before display to avoid false zeros.
+- POS Bold terminal charges go through pos_terminal_payments (reference = row id) and close the sale only after the signed Bold webhook marks it approved; sales still record method "datafono" so R-Count/finance mapping stays unchanged.
+- DB hooks via net.http_post set timeout_milliseconds 60000; email/billing handlers exceed the 5s default under load.
+- Use order-channel source/mode, never roles; retail stays Online.
+- Order-number assignment uses source/mode with POS priority and atomic per-channel counters, never provisional number text; this keeps assisted B2B drafts out of the web sequence.
+- Analytics share sales-period Colombia bounds and order-analysis invoice eligibility across Chat/Analysis/exports; embed invoice status/number in analytics reads so box invoices qualify once without duplicating orders, while payment filters remain independent.
+- R-Count invoice consecutives advance only via advance_rcount_consecutive (atomic, never backwards) and retry on duplicate rejection; concurrent sends otherwise collide.
+
+- USD totals use total_usd_exact (read alias total_usd); manual writes target it. A trigger mirrors legacy writes for compatibility without losing cents.
+- Campaign builders normalize their audience through campaign-audience before submission; interrupted campaigns retain locked content and can resume using the existing recipient exclusion checks.
+- R-Count invoice sends claim claim_rcount_send(order:box) and skip orders already sent; paid-trigger and auto-retry ran concurrently and issued duplicate DIAN invoices.
+- R-Count invoices require every order_items line (with SKU) plus shipping summing to the paid total before sending; paid triggers could fire before items were visible and billed shipping only. Pending invoices are corrected via PATCH {url}/facturas { items: [{ order_number, lines, metodo_pago }] }.
+- Inventory-error replacements use one idempotent atomic RPC for all selected original lines, units and locations; allocate their combined amounts in integer pesos/USD cents and consume replacement stock immediately so dispatch cannot deduct twice.
+- Fixed-amount promotion codes store an explicit currency and decimal USD amount; USD codes are international-only and must be validated at order preparation and gateway initiation, never interpreted as COP.
+- Points/code stacking exceptions are owner-readable, enforced by an order trigger and locked to one order; payment consumes the exception, unpaid cancellation releases it, and combined discounts never consume shipping.
+- B2B matrix selection is local to the collection and product/color row, colors sticky and scrollable cells together, and preserves destructive stock alerts; selection must never save quantities.
+- B2B matrix Total pedidos displays the sum of client orders per size, excluding fixed allocations and transfers; sizes above the preventa limit trigger alerts, and aggregate alerts preserve per-size shortages.
+- Install the browser translation guard before hydration; repair only observed translated text replacements and retain native errors for unrelated DOM mutations so translators cannot break React commits or leave stale values.
+- B2B print groups reference/color/HS across historical size prices, preserves summed quantities and amounts, normalizes sizes with size-order, and rasterizes only photos into small JPEGs before printing to keep PDFs lightweight without altering source media.
+- Consignment sales are reported per client location with a report date (report_consignment_location_sales marks transfer_items.sold_qty oldest-first); clients confirm receipt via b2b_receive_consignment_transfer, so leftovers stay in the client location and cannot be over-reported.
+- Signup-discount popup is mounted once inside storefront access gates; public signup issuance is atomic and deduplicated by email, while percentage codes share server-validated checkout arithmetic and the existing transactional order-code RPC so discounts never affect shipping.
+- Review media remains private: public display uses approvedReviewMedia with published-product/approved-review checks and 15-minute signed URLs; callers never choose storage paths, preventing arbitrary file access.
+- Run review-media authorization tests with `bunx vitest run --config vitest.security.config.ts`; omitting Start's RPC transform lets the tests execute the real authorization handler.
+- Ventas con destino fuera de Colombia se facturan a R-Count en USD y se validan (líneas+envío y pagos = total US$, ninguna prenda > US$5.000) antes de enviar; evita que pesos lleguen como dólares a la DIAN.

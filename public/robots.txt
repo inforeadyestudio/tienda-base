@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /pos
+Disallow: /b2b
+Disallow: /cuenta
+Disallow: /api/
+Disallow: /auth
+Disallow: /carrito
+Disallow: /gracias
+Disallow: /pago-retorno
+Disallow: /reset-password
+Disallow: /devolucion-dinero
+Disallow: /regalos
+
+Sitemap: https://www.tumarca.com/sitemap.xml

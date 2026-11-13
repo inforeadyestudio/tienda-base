@@ -1,0 +1,4 @@
+- Product Sale uses shared currency-aware pricing and one page-scoped Presence channel with anonymous ephemeral keys; countdown and viewer UI reuse that state to avoid duplicate subscriptions.
+- Catalog cards must pass both sale and comparison prices from the same variant in COP/USD to ProductCardInfo; otherwise collection/type discounts disappear or mix variants.
+- Use ProductPhoto for catalog thumbnails: responsive CDN sizes, lazy/asynchronous loading and original fallback preserve source media while reducing downloads.
+- Product try-on progress stays in root TryOnProvider; closing the modal never cancels the job, and a global reopen control shows the same task. Use indeterminate loading rather than presenting simulated provider completion percentages.

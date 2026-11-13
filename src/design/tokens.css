@@ -1,0 +1,565 @@
+@import "./sections/marca/match.css";
+
+/* Tokens de diseño de Tu Marca. Claude puede editar este archivo.
+   Colores, tipografías, sombras y animaciones del sitio público. */
+:root {
+  --design-radius: 1.25rem;
+  --design-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --design-duration: 600ms;
+}
+
+@keyframes design-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+.design-fade-up { animation: design-fade-up var(--design-duration) var(--design-ease) both; }
+
+/* Nota de producto del banner de gafas: aparece cuadro a cuadro, como papel que se posa */
+@keyframes marca-product-note-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.marca-product-note {
+  animation: marca-product-note-in 0.28s steps(3, end) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marca-product-note { animation: none; }
+}
+
+/* Banner de productos que giran: cada puesto tiene sus tres fotos y muestra una según su lugar (cuadro a cuadro) */
+.marca-giro-v { opacity: 0; }
+.marca-giro-item[data-v="l"] .marca-giro-l,
+.marca-giro-item[data-v="t"] .marca-giro-t,
+.marca-giro-item[data-v="f"] .marca-giro-f,
+.marca-giro-item:not([data-v]) .marca-giro-f { opacity: 1; }
+.marca-giro-item[data-m="1"] .marca-giro-v { transform: scaleX(-1); }
+
+/* ==========================================================================
+   Tu Marca · sistema editorial (secciones design-marca-*)
+   Claro y limpio; el papel se siente en el grano, el papel parafinado y el
+   movimiento cuadro a cuadro. Rectángulos rectos. Sin itálicas.
+   Tipografías (manual de marca): Roboto Condensed Regular en MAYÚSCULA (títulos y frases cortas),
+   Roboto Light (subtítulos y texto), Roboto Medium (énfasis), IBM Plex Mono en MAYÚSCULA (detalles, precios, botones).
+   ========================================================================== */
+
+/* Tipografía de marca (manual Tu Marca): Roboto Condensed (títulos) y Roboto (subtítulos Light, texto Light, botones Medium).
+   Fuentes libres (SIL OFL 1.1, ver fonts/Roboto-OFL.txt). Variables: un archivo cubre todos los pesos. */
+@font-face {
+  font-family: "Roboto Condensed";
+  src: url("./fonts/RobotoCondensed-Variable-latin.woff2") format("woff2-variations"), url("./fonts/RobotoCondensed-Variable-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("./fonts/Roboto-Variable-latin.woff2") format("woff2-variations"), url("./fonts/Roboto-Variable-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("./fonts/IBMPlexMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* paleta (lo claro manda; los acentos solo como objetos pequeños) */
+  --marca-paper: #f1ece2; /* fondo de todo el sitio: beige muy claro de la marca (más claro que la piedra) */
+  --marca-marfil: #f1ebdb;
+  --marca-piedra: #e2dccf;
+  --marca-gris: #a39e92;
+  --marca-suave: #6e6157;
+  --marca-cacao: #352923;
+  --marca-lima: #cdcb5e;
+  --marca-rosa: #ffe7ef;
+  --marca-azul: #c2e5ed;
+  --marca-burdeos: #60181f;
+  --marca-acento: #60181f; /* acento de color (tagline, isotipo); en secciones burdeos pasa a azul */
+  --marca-line: rgb(53 41 35 / 0.13);
+  --marca-line-strong: rgb(53 41 35 / 0.3);
+  --marca-vellum: rgb(241 236 226 / 0.56); /* vidrio tintado con el beige de la página */
+  --marca-fog-veil: rgb(246 242 233 / 0.32);
+  --marca-noise: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .2 0 0 0 0 .16 0 0 0 0 .13 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  /* grano fino y pulido para el vidrio: puntos muy chiquitos y espaciados, como arena fina */
+  --marca-noise-fine: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='2.4' numOctaves='1' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .21 0 0 0 0 .16 0 0 0 0 .13 0 0 0 1.4 -.62'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --marca-title-stack: "Roboto Condensed", "Roboto", "Arial Narrow", ui-sans-serif, system-ui, sans-serif;
+  --marca-title-r-stack: "Roboto Condensed", "Roboto", "Arial Narrow", ui-sans-serif, system-ui, sans-serif;
+  --marca-sans-stack: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --marca-mono-stack: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --marca-steps: steps(6, end);
+}
+
+@theme inline {
+  --color-marca-paper: var(--marca-paper);
+  --color-marca-marfil: var(--marca-marfil);
+  --color-marca-piedra: var(--marca-piedra);
+  --color-marca-gris: var(--marca-gris);
+  --color-marca-suave: var(--marca-suave);
+  --color-marca-cacao: var(--marca-cacao);
+  --color-marca-lima: var(--marca-lima);
+  --color-marca-rosa: var(--marca-rosa);
+  --color-marca-azul: var(--marca-azul);
+  --color-marca-burdeos: var(--marca-burdeos);
+  --color-marca-line: var(--marca-line);
+  --color-marca-line-strong: var(--marca-line-strong);
+  --font-marca-title: var(--marca-title-stack);
+  --font-marca-title-r: var(--marca-title-r-stack);
+  --font-marca-sans: var(--marca-sans-stack);
+  --font-marca-mono: var(--marca-mono-stack);
+}
+
+/* Clases Tu Marca en la capa "components": las utilidades de Tailwind siempre pueden sobrescribirlas. */
+@layer components {
+  /* Base de cada sección Tu Marca */
+  .marca {
+    font-family: var(--marca-sans-stack);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+    color: var(--marca-cacao);
+    -webkit-font-smoothing: antialiased;
+  }
+  .marca em, .marca i { font-style: normal; }
+
+  /* Voces tipográficas */
+  .marca-t { font-family: var(--marca-title-stack); font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; margin: 0; }
+  .marca-t b, .marca-t strong { font-weight: 500; } /* «GOOD things»: la palabra de énfasis en Medium */
+  .marca-tr { font-family: var(--marca-title-r-stack); font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.2; margin: 0; }
+  .marca-st { font-family: var(--marca-sans-stack); font-weight: 300; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.15; margin: 0; } /* subtítulo: Roboto Light */
+  .marca-mono { font-family: var(--marca-mono-stack); font-weight: 400; font-size: 10.5px; line-height: 1.5; letter-spacing: 0.12em; text-transform: uppercase; font-feature-settings: "zero" 1; }
+  .marca-mono-soft { color: var(--marca-suave); }
+
+  /* Botón entre corchetes con subrayado que se dibuja cuadro a cuadro */
+  .marca-bk { font-family: var(--marca-mono-stack); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--marca-cacao); background: none; border: 0; padding: 6px 1px; cursor: pointer; position: relative; display: inline-block; white-space: nowrap; text-decoration: none; }
+  .marca-bk::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 0.24s steps(4, end); }
+  .marca-bk:hover::after, .marca-bk[aria-pressed="true"]::after { transform: scaleX(1); }
+  .marca-btn { font-family: var(--marca-mono-stack); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--marca-cacao); background: transparent; border: 1px solid var(--marca-cacao); padding: 13px 18px; cursor: pointer; display: inline-block; text-align: center; text-decoration: none; transition: background 0.2s steps(2, end), color 0.2s steps(2, end); }
+  .marca-btn:hover { background: var(--marca-cacao); color: var(--marca-paper); }
+  .marca :focus-visible { outline: 1px solid var(--marca-cacao); outline-offset: 3px; }
+
+  /* Papel parafinado, grano y sombra de objeto */
+  /* Vidrio beige (glassmorphism): translúcido con el beige de la página, desenfoque, un brillo suave en el borde (como el canto
+     de un vidrio) y un grano muy fino y pulido. Ojo: algunas vistas previas dentro de apps pintan el desenfoque por cuadros. */
+  .marca-vellum { position: relative; isolation: isolate; background: linear-gradient(140deg, rgb(255 255 255 / 0.24), rgb(255 255 255 / 0.05) 38%, transparent 62%), var(--marca-vellum); border: 1px solid rgb(255 255 255 / 0.32); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5), inset 0 -1px 0 rgb(53 41 35 / 0.05); -webkit-backdrop-filter: blur(16px) saturate(1.06) brightness(1.03); backdrop-filter: blur(16px) saturate(1.06) brightness(1.03); }
+  .marca-vellum.marca-lift { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.5), inset 0 -1px 0 rgb(53 41 35 / 0.05), 0 1px 1px rgb(53 41 35 / 0.08), 0 18px 34px -12px rgb(53 41 35 / 0.22); }
+  .marca-vellum::before { content: ""; position: absolute; inset: 0; z-index: 0; background-image: var(--marca-noise-fine); background-size: 120px 120px; opacity: 0.32; pointer-events: none; }
+  .marca-vellum > * { position: relative; }
+  .marca-grain { position: relative; }
+  .marca-grain::after { content: ""; position: absolute; inset: 0; background-image: var(--marca-noise); opacity: 0.22; pointer-events: none; }
+  .marca-lift { box-shadow: 0 1px 1px rgb(53 41 35 / 0.08), 0 18px 34px -12px rgb(53 41 35 / 0.22); }
+
+  /* Isotipo animado: pupila que sigue el cursor, parpadeo, giro de entrada */
+  .marca-iso svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .marca-iso .marca-iso-pu path { transform-box: view-box; transform-origin: 432px 555px; transition: transform 0.1s steps(2, end); }
+  .marca-iso.is-blink .marca-iso-pu path { transform: scaleY(0.12); }
+  .marca-iso.is-spin .marca-iso-sw { animation: marca-iso-spin 0.9s steps(9, end) both; transform-box: view-box; transform-origin: 432px 556px; }
+  @keyframes marca-iso-spin { from { transform: rotate(-200deg) scale(0.55); opacity: 0; } 30% { opacity: 1; } to { transform: none; opacity: 1; } }
+
+  /* Movimiento cuadro a cuadro */
+  @keyframes marca-fade { from { opacity: 0; } to { opacity: 1; } }
+  .marca-fade { animation: marca-fade 0.3s steps(3, end) both; }
+  @keyframes marca-leave {
+    0% { transform: translate(var(--x), var(--y)) rotate(var(--r)); }
+    50% { transform: translate(calc(var(--x) + 60px), calc(var(--y) - 140px)) rotate(12deg); }
+    100% { transform: translate(var(--x), var(--y)) rotate(var(--r)); }
+  }
+  .marca-leave { animation: marca-leave 0.64s steps(7, end) forwards; }
+  .marca-steps { transition-timing-function: steps(2, end); }
+
+  /* Foto con niebla: vidrio esmerilado que el cursor aclara */
+  .marca-fog { position: relative; overflow: hidden; background: var(--marca-piedra); touch-action: pan-y; -webkit-tap-highlight-color: transparent; }
+  .marca-fog img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(16px) saturate(0.8); transform: scale(1.08); }
+  .marca-fog canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .marca-fog.is-live img { opacity: 0; }
+  .marca-fog::after { content: ""; position: absolute; inset: 0; background-image: var(--marca-noise); opacity: 0.28; pointer-events: none; }
+
+  /* Caja de fósforos: tipografías del sistema */
+  .marca-match .mb-root { --f-title: var(--marca-title-r-stack); --f-mono: var(--marca-mono-stack); }
+}
+
+/* Tu Marca · tienda (franja, menú, bolsa, newsletter, footer) */
+@layer components {
+  /* El grano va sin modo de fusión (el ruido ya es café translúcido, así que se ve igual). */
+  .marca-grain-page { position: fixed; inset: 0; z-index: 300; pointer-events: none; background-image: var(--marca-noise); opacity: 0.1; transform: translateZ(0); }
+  .marca-strip span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 16px; transition: transform 0.42s steps(5, end), opacity 0.42s steps(5, end); }
+  .marca-strip span.is-out { transform: translateY(-100%); opacity: 0; }
+  .marca-strip span.is-pre { transform: translateY(100%); opacity: 0; transition: none; }
+  /* Marca del header: las letras se van en remolino al centro y de ahí sale el isotipo girando (al subir, al revés) */
+  .marca-hmark { position: relative; display: grid; place-items: center; }
+  .marca-hmark > span { grid-area: 1 / 1; display: block; }
+  .marca-hmark-l { transform-box: view-box; transform-origin: 968px 540px; transition: transform 0.72s cubic-bezier(0.2, 1.4, 0.36, 1) calc(0.3s + var(--k) * 0.06s), opacity 0.12s linear calc(0.3s + var(--k) * 0.06s); }
+  .marca-hmark.is-iso .marca-hmark-l { opacity: 0; transform: rotate(calc(200deg + var(--i) * 26deg)) scale(0); transition: transform 0.44s cubic-bezier(0.6, 0, 0.9, 0.4) calc((2 - var(--k)) * 0.045s), opacity 0.1s linear calc(0.34s + (2 - var(--k)) * 0.045s); }
+  .marca-hmark-iso { opacity: 0; transform: rotate(-330deg) scale(0); transition: transform 0.36s cubic-bezier(0.6, 0, 0.9, 0.4), opacity 0.08s linear 0.28s; pointer-events: none; }
+  .marca-hmark.is-iso .marca-hmark-iso { opacity: 1; transform: none; pointer-events: auto; transition: transform 0.82s cubic-bezier(0.16, 1.55, 0.38, 1) 0.36s, opacity 0.06s linear 0.36s; }
+  @media (prefers-reduced-motion: reduce) { .marca-hmark-l, .marca-hmark-iso, .marca-hmark.is-iso .marca-hmark-l, .marca-hmark.is-iso .marca-hmark-iso { transition: opacity 0.2s linear; } }
+  /* Isotipo vivo (header): un temblor leve cuadro a cuadro sobre el hervor del trazo */
+  .marca-iso.is-alive .marca-iso-sw { transform-box: view-box; transform-origin: 432px 556px; animation: marca-iso-alive 2.4s steps(1, end) infinite; }
+  @keyframes marca-iso-alive {
+    0% { transform: rotate(-1.2deg) scale(1.005); }
+    12.5% { transform: rotate(0.9deg) scale(0.995, 1.004); }
+    25% { transform: rotate(-0.5deg) scale(1.008, 0.997); }
+    37.5% { transform: rotate(1.4deg) scale(0.997); }
+    50% { transform: rotate(-1.4deg) scale(1.003, 1.008); }
+    62.5% { transform: rotate(0.4deg) scale(1.008, 0.996); }
+    75% { transform: rotate(-0.9deg) scale(0.996); }
+    87.5% { transform: rotate(1deg) scale(1.005, 1); }
+  }
+  @media (prefers-reduced-motion: reduce) { .marca-iso.is-alive .marca-iso-sw { animation: none; } }
+  /* Tarjetas de papel de los banners: al pasar el mouse se mueven un poquito, cuadro a cuadro (como papel que se acomoda) */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .marca-nudge:hover { animation: marca-nudge 1.6s steps(1, end) infinite; }
+  }
+  @keyframes marca-nudge {
+    0% { transform: rotate(-0.6deg) translateY(-2px); }
+    12.5% { transform: rotate(0.4deg) translateY(-3px); }
+    25% { transform: rotate(-0.2deg) translateY(-1px); }
+    37.5% { transform: rotate(0.7deg) translateY(-3px); }
+    50% { transform: rotate(-0.5deg) translateY(-2px); }
+    62.5% { transform: rotate(0.2deg) translateY(-4px); }
+    75% { transform: rotate(-0.7deg) translateY(-2px); }
+    87.5% { transform: rotate(0.5deg) translateY(-3px); }
+  }
+  /* Pantalla de carga: el isotipo se llena de abajo hacia arriba; al llenarse parpadea y la pantalla sube */
+  .marca-loader { position: fixed; inset: 0; z-index: 400; display: grid; place-items: center; background: var(--marca-paper); color: var(--marca-cacao); transition: transform 0.7s cubic-bezier(0.7, 0, 0.2, 1); animation: marca-loader-bail 0.4s linear 6s forwards; }
+  .marca-loader.is-js { animation: none; }
+  .marca-loader.is-out { transform: translateY(-100%); }
+  .marca-loader.is-nav { background: rgb(241 236 226 / 0.92); animation: marca-fade 0.25s steps(2, end) both; }
+  @keyframes marca-loader-bail { to { opacity: 0; visibility: hidden; } }
+  .marca-load-iso { position: relative; display: block; width: clamp(68px, 9vw, 96px); }
+  .marca-load-iso svg { display: block; width: 100%; height: auto; overflow: visible; fill: currentColor; }
+  .marca-load-base { opacity: 0.14; }
+  .marca-load-fill { position: absolute; inset: 0; clip-path: inset(100% 0 0 0); transition: clip-path 0.25s linear; animation: marca-load-pre 2.4s cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
+  .marca-loader.is-js .marca-load-fill { animation: none; }
+  .marca-loader .marca-load-fill.is-loop { animation: marca-load-loop 1.3s steps(9, end) infinite; }
+  @keyframes marca-load-pre { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(40% 0 0 0); } }
+  @keyframes marca-load-loop { 0% { clip-path: inset(100% 0 0 0); opacity: 1; } 80% { clip-path: inset(0 0 0 0); opacity: 1; } 100% { clip-path: inset(0 0 0 0); opacity: 0; } }
+  .marca-load-pu { transform-box: view-box; transform-origin: 432px 555px; }
+  .marca-loader.is-full .marca-load-pu { animation: marca-load-blink 0.28s steps(2, end) 0.08s; }
+  .marca-loader.is-full .marca-load-iso { animation: marca-load-pop 0.4s cubic-bezier(0.2, 1.6, 0.4, 1); }
+  @keyframes marca-load-blink { 50% { transform: scaleY(0.12); } }
+  @keyframes marca-load-pop { 40% { transform: scale(1.08); } }
+  @media (prefers-reduced-motion: reduce) { .marca-loader, .marca-load-fill { transition: none; } .marca-loader.is-out { transform: none; opacity: 0; } .marca-loader.is-full .marca-load-iso { animation: none; } }
+  /* el fondo beige cubre toda la página de la tienda (solo donde está el menú de la tienda, no el admin) */
+  html:has(.marca-hdr), body:has(.marca-hdr) { background-color: var(--marca-paper); }
+  .marca-hdr { background: var(--marca-paper); border-bottom: 1px solid transparent; transition: background 0.3s, border-color 0.3s; }
+  .marca-hdr.is-scrolled { background: linear-gradient(180deg, rgb(255 255 255 / 0.2), transparent), rgb(241 236 226 / 0.68); -webkit-backdrop-filter: blur(16px) saturate(1.06); backdrop-filter: blur(16px) saturate(1.06); border-bottom-color: rgb(255 255 255 / 0.4); box-shadow: 0 1px 0 var(--marca-line); }
+  .marca-bump { animation: marca-bump 0.42s steps(3, end); display: inline-block; }
+  .marca-scrim[data-state="open"] { animation: marca-fade 0.25s ease both; }
+  .marca-scrim[data-state="closed"] { animation: marca-fade 0.2s ease reverse both; }
+  .marca-drawer[data-state="open"] { animation: marca-drawer-in 0.56s steps(7, end) both; }
+  .marca-drawer[data-state="closed"] { animation: marca-drawer-out 0.4s steps(5, end) both; }
+  .marca-sheet-l[data-state="open"] { animation: marca-sheet-in 0.5s steps(6, end) both; }
+  .marca-sheet-l[data-state="closed"] { animation: marca-sheet-out 0.36s steps(4, end) both; }
+  .marca-news[data-state="open"] { animation: marca-news-in 0.62s steps(7, end) both; }
+  .marca-news[data-state="closed"] { animation: marca-news-out 0.38s steps(4, end) both; }
+  .marca-field { display: flex; gap: 10px; align-items: flex-end; border-bottom: 1px solid var(--marca-cacao); }
+  .marca-field input { flex: 1; min-width: 0; border: 0; border-radius: 0; background: transparent; outline: none; font-family: var(--marca-mono-stack); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--marca-cacao); padding: 10px 0; }
+  .marca-field input::placeholder { color: var(--marca-gris); }
+  .marca-check { appearance: none; -webkit-appearance: none; width: 12px; height: 12px; border: 1px solid var(--marca-cacao); border-radius: 0; margin: 1px 0 0; flex: none; display: grid; place-content: center; cursor: pointer; }
+  .marca-check:checked::after { content: ""; width: 8px; height: 8px; background: var(--marca-cacao); }
+}
+@keyframes marca-bump { 0% { transform: scale(1); } 40% { transform: scale(1.5) rotate(-8deg); } 70% { transform: scale(0.9) rotate(4deg); } 100% { transform: none; } }
+@keyframes marca-drawer-in { from { transform: translateX(104%); } to { transform: none; } }
+@keyframes marca-drawer-out { from { transform: none; } to { transform: translateX(104%); } }
+@keyframes marca-sheet-in { from { transform: translateX(-104%); } to { transform: none; } }
+@keyframes marca-sheet-out { from { transform: none; } to { transform: translateX(-104%); } }
+@keyframes marca-news-in { 0% { transform: translate(-50%, calc(-50% + 110px)); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(-50%, -50%); opacity: 1; } }
+@keyframes marca-news-out { from { transform: translate(-50%, -50%); opacity: 1; } to { transform: translate(-50%, calc(-50% + 80px)); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .marca *, .marca *::before, .marca *::after, .marca-drawer, .marca-sheet-l, .marca-news, .marca-scrim { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* Tu Marca · ingreso a la cuenta (/auth): foto de campaña + papel, sin animales heredados */
+@layer components {
+  .marca-login { min-height: 100svh; display: grid; grid-template-columns: 1fr; background: var(--marca-paper); }
+  @media (min-width: 900px) { .marca-login { grid-template-columns: minmax(0, 1fr) minmax(420px, 0.9fr); } }
+  .marca-login-photo { position: relative; height: 36svh; min-height: 240px; overflow: hidden; background: var(--marca-marfil); }
+  @media (min-width: 900px) { .marca-login-photo { height: auto; min-height: 100svh; position: sticky; top: 0; } }
+  .marca-login-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; mix-blend-mode: multiply; transform: scale(0.95); }
+  @media (min-width: 900px) { .marca-login-photo img { transform: scale(1.05); } }
+  .marca-login-photo p { position: absolute; z-index: 1; margin: 0; color: var(--marca-cacao); }
+  .marca-login-ref { left: 20px; bottom: 16px; }
+  .marca-login-ref span { color: var(--marca-suave); margin-right: 6px; }
+  .marca-login-count { right: 20px; bottom: 16px; color: var(--marca-suave) !important; }
+  @media (min-width: 900px) { .marca-login-ref { left: 32px; bottom: 28px; } .marca-login-count { right: 32px; bottom: 28px; } }
+  .marca-login-panel { display: flex; flex-direction: column; align-items: center; padding: 28px 24px 48px; }
+  @media (min-width: 900px) { .marca-login-panel { justify-content: center; padding: 56px 48px; } }
+  .marca-login-wordmark { width: 100%; max-width: 400px; }
+  .marca-login-wordmark img { display: block; width: 118px; height: auto; mix-blend-mode: multiply; }
+  @media (min-width: 900px) { .marca-login-panel { position: relative; } .marca-login-wordmark { position: absolute; top: 40px; right: 48px; width: auto; } .marca-login-wordmark img { width: 112px; } }
+  .marca-login-card { width: 100%; max-width: 400px; margin-top: 28px; display: flex; flex-direction: column; align-items: flex-start; }
+  .marca-login-iso { display: none; width: 46px; color: var(--marca-cacao); margin-bottom: 18px; }
+  .marca-login-iso > .marca-iso { width: 100%; }
+  @media (min-width: 900px) { .marca-login-iso { display: block; } }
+  .marca-login-card h1 { font-size: clamp(40px, 6vw, 58px); margin: 10px 0 12px; }
+  .marca-login-tagline { margin: 0 0 34px; font-family: var(--marca-mono-stack); font-size: 11px; letter-spacing: 0.06em; color: var(--marca-suave); }
+  .marca-login-form { width: 100%; display: flex; flex-direction: column; gap: 22px; }
+  .marca-login-field { display: flex; flex-direction: column; gap: 8px; }
+  .marca-login-label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .marca-login-field input { width: 100%; border: 0; border-bottom: 1px solid var(--marca-line-strong); background: transparent; padding: 10px 0; font-family: var(--marca-sans-stack); font-size: 16px; letter-spacing: 0.02em; color: var(--marca-cacao); border-radius: 0; outline: none; transition: border-color 0.2s steps(2, end); }
+  .marca-login-field input::placeholder { color: var(--marca-gris); }
+  .marca-login-field input:focus { border-bottom-color: var(--marca-cacao); box-shadow: 0 1px 0 0 var(--marca-cacao); }
+  .marca-login-password { position: relative; }
+  .marca-login-password input { padding-right: 40px; }
+  .marca-login-eye { position: absolute; right: 0; bottom: 6px; display: grid; place-items: center; width: 32px; height: 32px; background: none; border: 0; color: var(--marca-suave); cursor: pointer; }
+  .marca-login-eye svg { width: 18px; height: 18px; }
+  .marca-login-eye:hover { color: var(--marca-cacao); }
+  .marca-login-submit { margin-top: 8px; display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 17px 20px; border: 1px solid var(--marca-cacao); background: var(--marca-cacao); color: var(--marca-paper); font-family: var(--marca-mono-stack); font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: background 0.2s steps(2, end), color 0.2s steps(2, end); }
+  .marca-login-submit svg { width: 18px; height: 18px; }
+  .marca-login-submit:hover:not(:disabled) { background: var(--marca-lima); color: var(--marca-cacao); }
+  .marca-login-submit:disabled { opacity: 0.6; cursor: wait; }
+  .marca-login-status { min-height: 1.4em; margin: 0; font-size: 13px; color: var(--marca-suave); }
+  .marca-login-join { margin: 18px 0 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  @media (prefers-reduced-motion: reduce) { .marca-login-submit, .marca-login-field input { transition: none; } }
+}
+
+/* Tu Marca · página de bloqueo "Muy pronto" */
+@layer components {
+  .marca-cs { min-height: 100svh; display: flex; flex-direction: column; background: var(--marca-paper); padding: 22px 20px 20px; }
+  @media (min-width: 900px) { .marca-cs { padding: 32px 40px 28px; } }
+  .marca-cs > * { position: relative; z-index: 1; }
+  .marca-cs-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .marca-cs-when-pre { display: none; }
+  @media (min-width: 640px) { .marca-cs-when-pre { display: inline; } }
+  /* Logo en el color del texto (cacao): el PNG se usa como máscara. */
+  .marca-cs-logo { display: block; width: 68px; aspect-ratio: 1376 / 850; background: var(--marca-cacao); -webkit-mask: var(--marca-cs-logo) center / contain no-repeat; mask: var(--marca-cs-logo) center / contain no-repeat; }
+  @media (min-width: 900px) { .marca-cs-logo { width: 84px; } }
+  .marca-cs-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 28px 0; }
+  .marca-cs-iso { display: block; width: 42px; color: var(--marca-cacao); margin-bottom: 14px; }
+  .marca-cs-iso > .marca-iso { width: 100%; }
+  .marca-cs h1 { font-size: clamp(46px, 9vw, 112px); line-height: 0.95; }
+  .marca-cs-flip { position: relative; width: min(560px, 92vw); aspect-ratio: 16 / 7; margin: 6px 0 4px; overflow: hidden; background: var(--marca-paper); }
+  .marca-cs-flip img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; mix-blend-mode: multiply; opacity: 0; transform: scale(1.02); }
+  .marca-cs-flip img.is-on { opacity: 1; }
+  .marca-cs-flip-ref { position: absolute; right: 4px; bottom: 2px; color: var(--marca-suave); }
+  .marca-cs-count { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: min(520px, 100%); margin: 8px 0 0; border-top: 1px solid var(--marca-line-strong); border-bottom: 1px solid var(--marca-line-strong); }
+  .marca-cs-count > div { padding: 14px 4px 12px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .marca-cs-count > div + div { border-left: 1px solid var(--marca-line); }
+  .marca-cs-count dd { margin: 0; font-family: var(--marca-title-r-stack); font-size: clamp(28px, 5vw, 44px); line-height: 1; font-variant-numeric: tabular-nums; color: var(--marca-cacao); }
+  .marca-cs-count dt { font-size: 9.5px; }
+  .marca-cs-message { max-width: 420px; margin: 22px 0 0; font-size: 14px; line-height: 1.6; color: var(--marca-suave); }
+  .marca-cs-form { display: flex; align-items: flex-end; gap: 14px; width: min(440px, 100%); margin-top: 22px; border-bottom: 1px solid var(--marca-cacao); }
+  .marca-cs-form input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 12px 0; font-family: var(--marca-sans-stack); font-size: 16px; color: var(--marca-cacao); outline: none; }
+  .marca-cs-form input::placeholder { color: var(--marca-gris); }
+  .marca-cs-form .marca-bk { padding-bottom: 12px; white-space: nowrap; }
+  .marca-cs-done { margin-top: 26px; color: var(--marca-cacao); }
+  .marca-cs-bottom { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+  .marca-cs-bottom nav { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+  @media (min-width: 900px) { .marca-cs-bottom { flex-direction: row; justify-content: space-between; } }
+}
+
+/* Precio de la ficha de producto (componente de la lógica con sus propias clases): voz mono de Tu Marca.
+   Fuera de capas para ganarle a las utilidades del componente. */
+.marca-price > div { font-family: var(--marca-mono-stack); letter-spacing: 0.06em; gap: 0.75rem; }
+.marca-price span { font-family: var(--marca-mono-stack); font-weight: 400; font-size: 15px; color: var(--marca-cacao); }
+.marca-price del, .marca-price del * { font-size: 12px; opacity: 0.6; }
+
+/* ==========================================================================
+   Pantalla de espera (BrandLoaderView) y marca del panel (AdminBrandView)
+   ========================================================================== */
+@layer components {
+  /* el isotipo que se llena en bucle, en cualquier lugar (no solo en la pantalla completa) */
+  .marca-load-fill.is-loop { animation: marca-load-loop 1.3s steps(9, end) infinite; }
+  /* dentro de la página: toma el color del lugar (claro o noche) */
+  .marca-wait { display: grid; flex: 1 1 auto; min-height: 60vh; place-items: center; padding: 80px 0; color: var(--foreground); }
+  .marca-wait .marca-load-iso { width: 56px; }
+
+  .marca-admin-brand { display: grid; justify-items: start; gap: 10px; }
+  .marca-admin-brand.is-collapsed { justify-items: center; }
+  .marca-admin-brand-link { display: inline-grid; line-height: 0; }
+  .marca-admin-brand-sub { font-family: var(--marca-mono-stack); font-size: 10px; line-height: 1.4; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-foreground); }
+  .marca-admin-brand.is-collapsed .marca-admin-brand-sub { display: none; }
+}
+
+/* ==========================================================================
+   Tu Marca en todo el sistema: panel de administración (Sales Hub, Tienda Online, B2B), POS, portal B2B, cuenta,
+   pago y cualquier pantalla que use los tokens globales. Solo estética: colores y tipografías de la marca,
+   esquinas rectas. No cambia ningún componente ni su funcionamiento.
+   styles.css declara esos tokens después de importar este archivo; por eso aquí van con un poco más de
+   especificidad (:root:root, :root .admin-scope…). Las reglas fuera de capas ganan a las utilidades de Tailwind.
+   ========================================================================== */
+
+/* --- Tema claro --- */
+:root:root {
+  /* paleta base del sistema */
+  --ivory: #f1ece2;   /* papel: fondo (el mismo beige de la tienda) */
+  --cream: #e9e3d6;   /* papel tostado: paneles, filas y bloques */
+  --shell: #f6f2ea;
+  --ink: #352923;     /* cacao: texto y botones */
+  --moss: #6e6157;    /* suave: texto secundario */
+  --clay: #60181f;    /* burdeos: contadores y acentos */
+  --data: #9a9837;    /* lima oscuro: datos y gráficas */
+  --data-soft: #cdcb5e;
+  --data-pale: #e8e6b8;
+  --data-muted: #a39e92;
+  --channel-online: var(--data);
+  --channel-manual: #7fb3bf;
+  --channel-b2b: #352923;
+  --channel-pos: #60181f;
+
+  --background: var(--ivory);
+  --foreground: var(--ink);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--ivory);
+  --secondary: #e7e1d4;
+  --secondary-foreground: var(--ink);
+  --muted: #e7e1d4;
+  --muted-foreground: var(--moss);
+  --accent: #e2dccf;
+  --accent-foreground: var(--ink);
+  --destructive: #a1342b;
+  --destructive-foreground: #fbf8f2;
+  --border: rgb(53 41 35 / 0.13);
+  --input: rgb(53 41 35 / 0.22);
+  --ring: var(--ink);
+  --chart-1: #352923;
+  --chart-2: #9a9837;
+  --chart-3: #60181f;
+  --chart-4: #7fb3bf;
+  --chart-5: #a39e92;
+  --sidebar: #ebe5d8;
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink);
+  --sidebar-primary-foreground: var(--ivory);
+  --sidebar-accent: #e2dccf;
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: rgb(53 41 35 / 0.13);
+  --sidebar-ring: var(--ink);
+
+  /* pantallas de ingreso / acceso por región */
+  --login-background: #f1ece2;
+  --login-green: #352923;
+  --login-ink: #352923;
+  --login-muted: #6e6157;
+  --login-line: rgb(53 41 35 / 0.2);
+  --login-button-text: #f1ece2;
+  --login-hover: #4a3a31;
+
+  /* esquinas rectas (las píldoras y los círculos siguen redondos) */
+  --radius: 0px;
+
+  /* tipografías de la marca */
+  --font-sans: var(--marca-sans-stack);
+  --font-serif: var(--marca-title-stack);
+}
+
+/* el panel y el portal B2B pintan su propio fondo: el papel de la marca */
+:root .admin-scope,
+:root .admin-scope.b2b-portal {
+  --ivory: #f1ece2;
+  --cream: #e9e3d6;
+  --background: var(--ivory);
+  background-color: var(--ivory);
+}
+/* vista previa de escenas dentro del panel: el mismo beige de la tienda (en la noche sigue el tema del panel) */
+:root .admin-scope .scene-preview { --ivory: #f1ece2; --cream: #e9e3d6; }
+/* portada del panel (fondo gris fijo en su archivo) — TODO(logica): cambiar bg-[#F5F5F3] por bg-background */
+:root .admin-scope.bg-\[\#F5F5F3\] { background-color: var(--ivory); }
+
+/* --- Tema de noche (se activa solo en la noche o si el equipo lo elige) --- */
+:root:root.dark {
+  --ivory: #211a16;   /* cacao muy oscuro */
+  --cream: #2a221d;
+  --shell: #261e1a;
+  --ink: #f1ece2;     /* papel */
+  --moss: #b3a99c;
+  --clay: #cdcb5e;    /* lima */
+  --data: #cdcb5e;
+  --data-soft: #e0de8a;
+  --data-pale: #3a3626;
+  --data-muted: #8a8378;
+  --channel-online: var(--data);
+  --channel-manual: #c2e5ed;
+  --channel-b2b: #ffe7ef;
+  --channel-pos: #d08a8f;
+
+  --background: var(--ivory);
+  --foreground: var(--ink);
+  --card: #2a221d;
+  --card-foreground: var(--ink);
+  --popover: #2a221d;
+  --popover-foreground: var(--ink);
+  --primary: var(--clay);
+  --primary-foreground: #211a16;
+  --secondary: #342a24;
+  --secondary-foreground: var(--ink);
+  --muted: #342a24;
+  --muted-foreground: var(--moss);
+  --accent: #342a24;
+  --accent-foreground: var(--ink);
+  --destructive: #e07a6e;
+  --destructive-foreground: #211a16;
+  --border: rgb(241 236 226 / 0.12);
+  --input: rgb(241 236 226 / 0.18);
+  --ring: var(--clay);
+  --chart-1: #cdcb5e;
+  --chart-2: #c2e5ed;
+  --chart-3: #ffe7ef;
+  --chart-4: #a39e92;
+  --chart-5: #c76b72;
+  --sidebar: #2a221d;
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--clay);
+  --sidebar-primary-foreground: #211a16;
+  --sidebar-accent: #3a2f28;
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: rgb(241 236 226 / 0.1);
+  --sidebar-ring: var(--clay);
+}
+:root.dark .admin-scope,
+:root.dark .admin-scope.b2b-portal,
+:root.dark .admin-scope.bg-\[\#F5F5F3\] {
+  --ivory: #211a16;
+  --cream: #2a221d;
+  --background: var(--ivory);
+  background-color: var(--ivory);
+}
+/* en la noche, los bloques que ya son oscuros (bg-ink con texto claro) conservan su intención, en cacao */
+:root.dark [class~="bg-ink"],
+:root.dark [class~="text-ivory"],
+:root.dark [class~="border-ivory"],
+:root.dark [class~="bg-moss"] {
+  --ink: #17110e;
+  --moss: #6e6157;
+  --ivory: #f1ece2;
+  --cream: #e9e3d6;
+}
+
+/* --- Tipografías de la marca en todo el sistema --- */
+:root body { font-family: var(--marca-sans-stack); font-feature-settings: normal; }
+:root .font-sans { font-family: var(--marca-sans-stack); }
+:root .font-mono { font-family: var(--marca-mono-stack); }
+/* títulos y cifras grandes: Roboto Condensed en mayúscula */
+:root .font-serif,
+:root .admin-scope :where(.font-serif) {
+  font-family: var(--marca-title-stack);
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+:root .font-nm { font-family: var(--marca-sans-stack); font-weight: 500; letter-spacing: 0.01em; }
+:root .font-brown-sugar { font-family: var(--marca-title-stack); font-weight: 400; letter-spacing: 0.01em; }
+/* detalles en mayúscula del panel (etiquetas, encabezados de tabla, estados, botones): IBM Plex Mono */
+:root .admin-scope [class*="uppercase"]:not(.font-serif):not(.font-sans):not(.font-nm) {
+  font-family: var(--marca-mono-stack);
+  font-weight: 400;
+}
+/* la mono de la marca viene en un solo peso: los encabezados de tabla no se engrosan a la fuerza */
+:root .admin-scope [class*="uppercase"]:not(.font-serif):not(.font-sans):not(.font-nm) :is(th, b, strong) { font-weight: 400; }
+
+/* --- Esquinas rectas en el panel: tarjetas, ventanas y campos (las píldoras y los círculos se quedan) --- */
+:root .admin-scope [class*="rounded-"]:not(.rounded-full),
+:root .admin-scope[class*="rounded-"]:not(.rounded-full) { border-radius: 0; }

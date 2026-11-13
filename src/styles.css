@@ -1,0 +1,468 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+@import "./design/tokens.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Tu Marca design system — "Editorial cotton press"
+ * Palette: ivory #fcfbf7 · ink #1a1a1a · moss #3e4637 · clay #a85d44
+ * Fonts: Instrument Serif (display) + Inter (body)
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --font-serif: 'Neue Montreal', 'PP Neue Montreal', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-ivory: var(--ivory);
+  --color-ink: var(--ink);
+  --color-moss: var(--moss);
+  --color-clay: var(--clay);
+  --color-mark-pending: oklch(0.86 0.15 92);
+  --color-cream: var(--cream);
+  --color-data: var(--data);
+  --color-data-soft: var(--data-soft);
+  --color-data-pale: var(--data-pale);
+  --color-data-muted: var(--data-muted);
+  --color-channel-online: var(--channel-online);
+  --color-channel-manual: var(--channel-manual);
+  --color-channel-b2b: var(--channel-b2b);
+  --color-channel-pos: var(--channel-pos);
+  --color-shell: var(--shell);
+  --color-sale-paper: var(--sale-paper-background);
+  /* Marca fija: verde del logo + beige de la tienda. No cambian con el tema. */
+  --color-brand-green: #465949;
+  --color-brand-beige: #f9f4e6;
+}
+
+:root {
+  --login-background: #ffffff;
+  --login-green: #455e4d;
+  --login-ink: #27352c;
+  --login-muted: #81877b;
+  --login-line: #d6d7c9;
+  --login-button-text: #fffdf2;
+  --login-hover: #344b3c;
+  --login-focus-background: color-mix(in oklab, var(--login-button-text) 20%, transparent);
+  --sale-paper-background: oklch(0.949 0 0);
+  --sale-paper-ink: oklch(0.25 0 0);
+  color-scheme: light;
+  --radius: 0.625rem;
+  /* Tu Marca palette — warm editorial cream sampled from brand stamp */
+  --ivory: #ffffff;
+  --cream: #f5efe4;
+  --shell: #fbf9f3;
+  --ink: oklch(0.20 0 0);
+  --moss: oklch(0.38 0.025 135);
+  --clay: oklch(0.58 0.12 40);
+  --data: oklch(0.72 0.17 151);
+  --data-soft: oklch(0.82 0.13 148);
+  --data-pale: oklch(0.93 0.065 146);
+  --data-muted: oklch(0.71 0.035 150);
+  --matrix-selection: color-mix(in oklab, var(--moss) 18%, var(--card));
+
+  /* Canales de venta: verde, ámbar, pino y terracota. */
+  --channel-online: var(--data);
+  --channel-manual: oklch(0.78 0.13 80);
+  --channel-b2b: oklch(0.42 0.07 165);
+  --channel-pos: var(--clay);
+
+  --background: var(--ivory);
+  --foreground: var(--ink);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--ink);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--ivory);
+  --secondary: oklch(0.94 0.008 90);
+  --secondary-foreground: var(--ink);
+  --muted: oklch(0.94 0.006 90);
+  --muted-foreground: var(--moss);
+  --accent: oklch(0.95 0.006 90);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.58 0.20 27);
+  --destructive-foreground: var(--ivory);
+  --border: oklch(0.15 0 0 / 8%);
+  --input: oklch(0.15 0 0 / 12%);
+  --ring: var(--moss);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink);
+  --sidebar-primary-foreground: var(--ivory);
+  --sidebar-accent: oklch(0.96 0.004 90);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: oklch(0.15 0 0 / 8%);
+  --sidebar-ring: var(--ink);
+}
+
+.b2b-matrix-row[data-selected="true"] > td:not(.bg-destructive) {
+  background-color: var(--matrix-selection);
+}
+
+/*
+ * Modo noche: se invierte la paleta base (ivory = fondo gris oscuro, ink = texto claro)
+ * para que todas las utilidades existentes (bg-ivory, text-ink, border-ink/10…) funcionen.
+ * Acento: verde claro.
+ */
+.dark {
+  --ivory: #17191a;
+  --cream: #1f2223;
+  --shell: #1c1f1f;
+  --ink: oklch(0.96 0.005 120);
+  --moss: oklch(0.82 0.05 140);
+  --clay: oklch(0.84 0.15 150);
+
+  --background: var(--ivory);
+  --foreground: var(--ink);
+  --card: #202324;
+  --card-foreground: var(--ink);
+  --popover: #202324;
+  --popover-foreground: var(--ink);
+  --primary: var(--clay);
+  --primary-foreground: #121413;
+  --secondary: #262a2a;
+  --secondary-foreground: var(--ink);
+  --muted: #262a2a;
+  --muted-foreground: var(--moss);
+  --accent: #262a2a;
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.65 0.20 27);
+  --destructive-foreground: var(--ink);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: var(--clay);
+  --sidebar: #1c1f20;
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--clay);
+  --sidebar-primary-foreground: #121413;
+  --sidebar-accent: #262a2a;
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: var(--clay);
+  --chart-1: oklch(0.84 0.15 150);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+}
+
+/* En modo noche las superficies "blancas" del layout también se oscurecen. */
+/*
+ * Las escenas editoriales que ya son oscuras (bg-ink / bg-moss con texto claro)
+ * conservan su intención: dentro de ellas se restauran los tokens originales.
+ */
+.dark [class~="bg-ink"],
+.dark [class~="text-ivory"],
+.dark [class~="border-ivory"],
+.dark [class~="bg-moss"] {
+  --ink: #101112;
+  --moss: oklch(0.38 0.025 135);
+  --ivory: #ffffff;
+  --cream: #efe9dc;
+}
+
+.dark .bg-white,
+.dark .bg-white\/95,
+.dark .bg-white\/60,
+.dark .bg-white\/40 {
+  background-color: color-mix(in oklab, var(--cream) 92%, transparent);
+}
+
+.dark .admin-scope,
+.dark .admin-scope .scene-preview {
+  --ivory: #17191a;
+  --cream: #1f2223;
+  --background: var(--ivory);
+  background-color: var(--ivory);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01';
+  }
+
+  .font-serif {
+    font-family: var(--font-serif);
+    font-style: normal;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+  .font-serif.italic, .font-serif .italic { font-style: normal; }
+}
+
+/* Admin/POS scope: override editorial serif with Neue Montreal */
+.admin-scope :where(.font-serif) {
+  font-family: 'Neue Montreal', 'PP Neue Montreal', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-style: normal;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+.admin-scope :where(.italic) {
+  font-style: normal;
+}
+
+/* Vista previa de escenas dentro del admin: usar la tipografía real del sitio público */
+.admin-scope .scene-preview :where(.font-serif) {
+  font-family: var(--font-serif);
+  letter-spacing: normal;
+  font-weight: 400;
+}
+.admin-scope .scene-preview :where(.italic) {
+  font-style: italic;
+}
+.admin-scope .scene-preview {
+  --ivory: #ffffff;
+  --cream: #f2ece0;
+}
+
+/* Admin/POS scope: warm beige background matching product modal */
+.admin-scope {
+  --ivory: #ffffff;
+  --cream: #efeeea;
+  --background: var(--ivory);
+  background-color: var(--ivory);
+}
+
+/* Portal B2B de clientes: fondo beige cálido como el menú lateral */
+.admin-scope.b2b-portal {
+  --ivory: #ffffff;
+  --cream: #efe8d8;
+  --background: var(--ivory);
+  background-color: var(--ivory);
+}
+
+/* Wholesale magazine: grounded paper depth without painting over the photographs. */
+.b2b-book-stage {
+  --book-ambient: color-mix(in oklab, var(--ink) 12%, transparent);
+  --book-contact: color-mix(in oklab, var(--ink) 16%, transparent);
+  --book-fold: color-mix(in oklab, var(--ink) 13%, transparent);
+  --book-edge: color-mix(in oklab, var(--ink) 18%, transparent);
+  --book-light: color-mix(in oklab, var(--ivory) 25%, transparent);
+  filter: drop-shadow(0 4px 2px var(--book-contact)) drop-shadow(0 17px 12px var(--book-ambient));
+}
+
+.b2b-flipbook .b2b-paper {
+  border: 1px solid color-mix(in oklab, var(--ink) 9%, transparent);
+  box-shadow: inset 0 0 0 1px var(--book-light);
+  isolation: isolate;
+}
+
+.b2b-flipbook .b2b-paper::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to right, var(--book-fold), transparent 5%, transparent 94%, var(--book-light));
+}
+
+.b2b-flipbook .b2b-paper.--left::after {
+  background: linear-gradient(to left, var(--book-fold), transparent 6%, transparent 96%, var(--book-light));
+}
+
+.b2b-flipbook .b2b-paper.--right::before,
+.b2b-flipbook .b2b-paper.--left::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  pointer-events: none;
+  background: linear-gradient(to right, var(--book-edge), var(--book-light), transparent);
+}
+
+.b2b-flipbook .b2b-paper.--right::before { right: 0; }
+.b2b-flipbook .b2b-paper.--left::before { left: 0; transform: scaleX(-1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .b2b-book-stage { filter: none; }
+}
+
+/* Neue Montreal utility for specific UI elements */
+.font-nm {
+  font-family: 'Neue Montreal', 'PP Neue Montreal', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-style: normal;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+
+.font-brown-sugar {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-style: normal;
+}
+
+
+/* Scroll fino para los paneles del editor editorial */
+.builder-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, currentColor 22%, transparent) transparent;
+  scroll-behavior: smooth;
+}
+.builder-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.builder-scroll::-webkit-scrollbar-track { background: transparent; }
+.builder-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, currentColor 18%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.builder-scroll::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, currentColor 32%, transparent);
+  background-clip: padding-box;
+}
+
+/* Sidebar track blends into its panel while the navigation alone scrolls. */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--ink) 22%, transparent) transparent;
+}
+.sidebar-scroll::-webkit-scrollbar { width: 7px; }
+.sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--ink) 22%, transparent);
+  border-radius: 999px;
+}
+
+/* Bottom sheets (menú, pago): la barra se hunde en el fondo beige y es más delgada. */
+.sheet-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--ink) 20%, transparent) var(--ivory);
+}
+.sheet-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+.sheet-scroll::-webkit-scrollbar-track { background: var(--ivory); }
+.sheet-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--ink) 20%, transparent);
+  border-radius: 999px;
+}
+.sheet-scroll::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--ink) 32%, transparent);
+}
+
+@keyframes loadbar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+/* Keep the departing portal visible until its destination has committed. */
+@keyframes admin-arrival { from { opacity: 0; } to { opacity: 1; } }
+.animate-admin-arrival { animation: admin-arrival 240ms ease-out both; }
+
+@supports (view-transition-name: none) {
+  html:active-view-transition-type(admin-portal)::view-transition-old(root) {
+    animation: portal-out 220ms ease-in both;
+  }
+  html:active-view-transition-type(admin-portal)::view-transition-new(root) {
+    animation: portal-in 220ms ease-out both;
+  }
+  @keyframes portal-out { to { opacity: 0; } }
+  @keyframes portal-in { from { opacity: 0; } }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-admin-arrival { animation: none; }
+  html:active-view-transition-type(admin-portal)::view-transition-old(root),
+  html:active-view-transition-type(admin-portal)::view-transition-new(root) {
+    animation-duration: 0.01ms;
+  }
+}
+
+/* Native chevrons ignore padding; replace them with an inset chevron throughout the app. */
+select:not(.appearance-none) {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: max(3rem, 2.5em);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a4034' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1.4rem center;
+  background-size: 12px 12px;
+}
+
+.pill-select {
+  padding-left: 1rem;
+}
+
+.dark select:not(.appearance-none) {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e5e8df' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+}
+
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.no-spin { -moz-appearance: textfield; appearance: textfield; }
+
+/* Independently clipped photographic paper pieces. */
+.sale-paper-section { display: flex; align-items: center; justify-content: center; width: 100%; background: var(--sale-paper-background); color: var(--sale-paper-ink); overflow: hidden; padding: 24px 0; }
+.sale-paper-section.hidden { display: none; }
+@media (min-width: 768px) { .sale-paper-section.md\:flex { display: flex; } }
+.sale-paper-canvas { position: relative; width: min(100%, 900px, 110svh); aspect-ratio: 1; container-type: inline-size; flex: none; }
+.sale-paper-header { position: absolute; left: 16.699%; top: 17.48%; width: 64.844%; height: 35.547%; z-index: 2; }
+.sale-paper-texture { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; pointer-events: none; }
+.sale-paper-print { position: absolute; inset: 27% 6% 5%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.sale-paper-title { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 5.25cqi; line-height: .94; letter-spacing: 0; max-width: 100%; overflow-wrap: anywhere; }
+.sale-paper-title span { display: block; }
+.sale-paper-logo { width: 4.6cqi; height: 4.6cqi; object-fit: contain; margin-top: 1.6cqi; mix-blend-mode: multiply; }
+.sale-paper-sale { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 600; font-size: 2.9cqi; line-height: 1; margin: .8cqi 0 0; letter-spacing: 0; }
+.sale-paper-dates { font-family: var(--font-sans); font-size: 1.15cqi; line-height: 1.3; margin: 1.05cqi 0 0; letter-spacing: 0; }
+.sale-paper-strip { position: absolute; display: block; border: 0; padding: 0; min-width: 0; border-radius: 0; background: transparent; color: var(--sale-paper-ink); box-shadow: none; transform-origin: 50% 0; touch-action: pan-y; white-space: normal; transition: none; }
+.sale-paper-strip:hover { background: transparent; }
+.sale-paper-strip:focus-visible { outline: 1px solid var(--sale-paper-ink); outline-offset: 3px; }
+.sale-paper-number { position: absolute; top: 4%; left: 0; right: 0; text-align: center; font-family: Georgia, serif; font-size: 1.05cqi; line-height: 1; }
+.sale-paper-print-area { position: absolute; top: 10%; left: 4%; width: 92%; height: 85%; overflow: hidden; pointer-events: none; }
+.sale-paper-product { position: absolute; width: 100%; height: 100%; max-width: none; max-height: none; object-fit: contain; mix-blend-mode: multiply; pointer-events: none; }
+
+/* Editorial login, scoped independently from storefront typography. */

@@ -1,0 +1,6 @@
+- Products previews for page-tienda resolve catalog order from live scenes in SceneContext rather than the published snapshot, so unsaved edits appear immediately; other pages keep the published shop order.
+- Products scenes enrich all source lists with the shared storefront catalog prices and currency-aware comparisons so preview and public cards show the same Sale values without changing selected media or order.
+- Our World sections use editable ww-* scenes in who-we-are-defs.ts; retain per-section editing.
+- Portrait/scroll video: independent editable reorderable/hideable scenes.
+- Sale paper: independent photo pieces and slot images via scene registry prevent static motion duplicates.
+- Scene contexts merge products picked in scene fields via useSceneContextWithPicked (scene-products.ts) so design sections render real admin products.

@@ -1,0 +1,15 @@
+- Shared kardex: kardex-modal.tsx is the single KardexModal used by sales hub (admin/inventario) and tienda online (admin/tienda/productos); it fetches active locations itself when the prop is omitted, and invoice numbers come from invoices (issued) with rcount_sync_log fallback. Never re-add local kardex copies.
+- Matrix reference, color and Curva Corte stay sticky together before order columns to retain row context.
+- Matrix sizes use size-order before grouping headers and retain every variant ID per cell; duplicate-size quantities and shortages aggregate without ambiguous writes or stored-data changes.
+- Bulk price drag-fill stays in BulkPriceTable with a pure range-copy helper; values remain local until the existing save action to avoid accidental catalog changes.
+- LiveVisitorsMetric observes anonymous storefront-wide Realtime Presence without contributing; PageViewBridge tracks visible public storefront tabs with browser-key deduplication, avoiding staff inflation and database polling.
+
+- Admin: mobile drawers, constrained widths, MobileOrderList and minmax(0,1fr) detail grids.
+- B2B details: one metadata/items/HS/history summary, paired payment/steps and boxes/billing rows, full-width timeline.
+- Matrix client marks (green/yellow/red per client column and product/color row) live in b2b_matrix_marks and are visual only; never affect orders or stock.
+- Matrix, preventa, B2B order/account and CRM list reads paginate with fetchAll (1000-row pages, stable order); single reads truncated silently at the server row cap.
+- Changing an order line warehouse goes only through change_order_item_location (admin/bodega/jefe_tiendas; paid/reserved, not shipped): it moves the reservation, transfer or deducted unit atomically so stock is never double-counted.
+- Shipping labels require scanned packing verification per scope (order, box:<id>, loc:<id>) via record_packing_verification; bypass authorization uses can_skip_packing_verification in both UI and database, validating current roles and the explicitly authorized warehouse chief account, and preserving the actor record.
+- Transfers are cancelled or unit-edited only via cancel_transfer / edit_transfer_items (staff, no order-linked rows): cancel returns stock by state (approved releases reservations, in_transit returns units to origin), edits adjust reservations by delta, so kardex and stock never drift.
+- Transfer creation shares transfer-scan and scanned-code normalization, groups reader scans by variant ID, and adds one unit per Enter; POS queues lookups to retain rapid scans without double submissions.
+- Matrix client cells with confirmed-order units stay editable upward: the typed total minus confirmed units goes to the [PREVENTA] draft; lowering below confirmed units is rejected so confirmed orders are only changed from their detail.
