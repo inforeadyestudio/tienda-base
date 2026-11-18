@@ -160,3 +160,54 @@ Claude con acceso a lógica y base de datos.
 ### Pasar mejoras entre marcas
 Cada marca es un repo independiente. Una mejora se lleva a otra marca con
 `git cherry-pick` del commit y aplicando su SQL de `db/changes/`.
+
+
+<!-- ready:verificacion:inicio — sección común a todos los repos de Ready Studio; para cambiarla, cámbiala en todos -->
+## Verificación (obligatorio antes de decir "listo")
+
+Nada se da por terminado sin evidencia. "Debería funcionar" no cuenta.
+
+### 1. Antes de escribir código
+- Convierte lo pedido en criterios de aceptación comprobables.
+  Ej: "al pagar una reserva, la cancha aparece ocupada y el pago queda en `payments` con estado `paid`".
+- Si no puedes decir cómo se comprobaría, pregunta antes de construir.
+
+### 2. Chequeos rápidos (siempre)
+- `npm run build` sin errores; `tsc --noEmit` y `lint` si existen.
+- Tests existentes en verde. Nunca modificar, saltar ni borrar un test para que pase.
+
+### 3. Probar el cambio como un usuario
+- Trabaja en una rama, no directo en `main`.
+- Si el repo está en Vercel, usa el preview de esa rama. Si no, levanta la app (`npm run dev`) y pruébala ahí.
+- Recorre en el navegador el flujo completo de los criterios con el usuario de prueba del sistema y toma captura del resultado.
+- Revisa la consola del navegador y los logs (Vercel, edge functions de Supabase): cero errores nuevos.
+- Si el cambio guarda datos, confírmalo con una consulta SQL de solo lectura en Supabase.
+- Solo datos de prueba: nunca crear, editar ni borrar datos reales de clientes para probar.
+
+### 4. Según lo que toque el cambio
+- Tablas, migraciones o RLS → `get_advisors` de Supabase sin alertas nuevas, y probar que un usuario sin permiso NO ve los datos.
+- Pagos, saldos, POS, inventario o contabilidad → caso normal + al menos un caso límite (pago duplicado, cancelación, monto 0). Nada queda negativo ni descuadrado.
+- Edge function → invocarla y revisar sus logs.
+- UI → revisar en escritorio y en móvil (375 px).
+- Integraciones (DIAN/Factus, WhatsApp, OpenAI, pasarelas de pago) → solo en modo prueba o sandbox.
+
+### 5. Reporte final (siempre en este formato)
+- **Pedido:** …
+- **Criterios de aceptación:** …
+- **Qué corrí → resultado:** comando o flujo → ✅/❌, con salida o captura
+- **Lo que NO pude verificar y por qué:** …
+- **Qué debe revisar Juan antes de publicar:** …
+
+### 6. Límites
+- Si un chequeo sigue fallando después de 3 intentos, detente y repórtalo. No sigas parchando.
+- No edites esta sección, los tests ni la configuración de CI para que un cambio pase.
+- Pasa a `main` solo con la verificación completa y la aprobación de Juan (en repos conectados a Vercel, `main` es producción).
+- En el commit indica `Verificado: sí / parcial / no` y qué se verificó.
+- Claude no maneja claves ni secretos: si una prueba los necesita, pídeselos a Juan o déjala como "no verificado".
+
+### Cómo verificar este sistema
+<!-- Completar por sistema. Si está vacío, al terminar la primera tarea propón a Juan cómo llenarlo. -->
+- **URL de producción / preview:** (por definir)
+- **Usuario de prueba:** (por definir — sin datos reales)
+- **Flujos críticos que nunca se pueden romper:** (por definir)
+<!-- ready:verificacion:fin -->
