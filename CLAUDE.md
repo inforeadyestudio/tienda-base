@@ -167,6 +167,12 @@ Cada marca es un repo independiente. Una mejora se lleva a otra marca con
 
 Nada se da por terminado sin evidencia. "Debería funcionar" no cuenta.
 
+### Nivel de verificación según el cambio
+- **Cambio pequeño** (textos, colores, estilos, un componente visual sin lógica): solo el build (paso 2) y una revisión rápida de la pantalla en el navegador. Reporte de 2–3 líneas.
+- **Cambio de lógica o de datos** (pagos, saldos, reservas, inventario, contabilidad, permisos, migraciones, edge functions, integraciones): verificación completa, pasos 1 a 6.
+- **Si Juan escribe "rápido" o "sin verificar"** en el pedido: solo el build, y en el reporte y el commit marca `Verificado: no`.
+- Si no está claro en qué nivel cae, usa la verificación completa.
+
 ### 1. Antes de escribir código
 - Convierte lo pedido en criterios de aceptación comprobables.
   Ej: "al pagar una reserva, la cancha aparece ocupada y el pago queda en `payments` con estado `paid`".
