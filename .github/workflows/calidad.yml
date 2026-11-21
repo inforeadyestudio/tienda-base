@@ -1,0 +1,74 @@
+# Pruebas automáticas de Ready Studio: corren solas en cada push (cualquier rama).
+# La lógica de cada paso está en .github/calidad.sh
+# No editar este archivo ni calidad.sh para que un cambio pase.
+name: Calidad
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  workflow_dispatch:
+
+concurrency:
+  group: calidad-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # 'true'  = si falla, el check queda en rojo.
+  # 'false' = solo informa (se dejó así porque hoy ya falla; cuando se arregle, cambiar a 'true').
+  # 'omitir' = no se corre (solo para el lint en repos donde tarda más de 5 minutos).
+  BLOQUEA_BUILD: 'true'
+  BLOQUEA_TIPOS: 'true'
+  BLOQUEA_LINT: 'omitir'
+  BLOQUEA_TESTS: 'false'
+
+jobs:
+  calidad:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Caché de dependencias
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ~/.bun/install/cache
+          key: deps-${{ runner.os }}-${{ hashFiles('package-lock.json', 'bun.lock', 'bun.lockb') }}
+          restore-keys: deps-${{ runner.os }}-
+
+      - name: Instalar dependencias
+        run: bash .github/calidad.sh instalar
+
+      - name: Build (compila)
+        if: ${{ !cancelled() }}
+        continue-on-error: ${{ env.BLOQUEA_BUILD != 'true' }}
+        run: bash .github/calidad.sh build
+
+      - name: Tipos (TypeScript)
+        if: ${{ !cancelled() }}
+        continue-on-error: ${{ env.BLOQUEA_TIPOS != 'true' }}
+        run: bash .github/calidad.sh tipos
+
+      - name: Lint (calidad de código)
+        if: ${{ !cancelled() && env.BLOQUEA_LINT != 'omitir' }}
+        continue-on-error: ${{ env.BLOQUEA_LINT != 'true' }}
+        run: bash .github/calidad.sh lint
+
+      - name: Tests (lógica de negocio)
+        if: ${{ !cancelled() }}
+        continue-on-error: ${{ env.BLOQUEA_TESTS != 'true' }}
+        run: bash .github/calidad.sh tests
+
+      - name: Dependencias con vulnerabilidades (informativo)
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: bash .github/calidad.sh auditoria

@@ -217,3 +217,10 @@ Nada se da por terminado sin evidencia. "Debería funcionar" no cuenta.
 - **Usuario de prueba:** (por definir — sin datos reales)
 - **Flujos críticos que nunca se pueden romper:** (por definir)
 <!-- ready:verificacion:fin -->
+
+## Pruebas automáticas (GitHub Actions)
+- Cada push (a cualquier rama) corre el workflow «Calidad» (`.github/workflows/calidad.yml`, lógica en `.github/calidad.sh`): build, tipos, lint, tests unitarios y auditoría de dependencias.
+- Después de subir un cambio, confirmar que «Calidad» quedó en verde (pestaña Actions de GitHub o `gh run list --workflow calidad.yml -L 1`). Si un paso bloqueante falla, se arregla el código; nunca el test, `calidad.sh` ni el workflow.
+- En el workflow, los pasos con `'false'` solo informan porque ya fallaban cuando se montó (21 nov 2026). Cuando se arreglen, pasarlos a `'true'` con aprobación de Juan.
+- Los tests que se conectan a la base de datos real no corren en CI. Los tests nuevos deben ser unitarios: sin red ni datos reales.
+- Si el cambio toca cobros, saldos, inventario, contabilidad o permisos: crear o actualizar el test unitario que lo cubre.
