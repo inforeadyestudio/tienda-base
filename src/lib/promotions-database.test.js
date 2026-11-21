@@ -11,7 +11,7 @@ it('aplica US$116 una vez y conserva el envío; rechaza pesos y puntos', async (
  CREATE TABLE orders(id uuid,customer_id uuid,status text,currency text,source text,points_redeemed int,subtotal_cop bigint,shipping_cop bigint,total_cop bigint,total_usd numeric,total_usd_exact numeric,discount_cop bigint);
  CREATE TABLE order_items(order_id uuid,unit_price_usd numeric,qty int);
  CREATE TABLE app_settings(key text,value jsonb);`);
- const sql=readFileSync(new URL('../../drizzle/migrations/0055_apply_fixed_usd_discount_codes.sql',import.meta.url),'utf8');
+ const sql=readFileSync(new URL('../../db/pruebas/0055_apply_fixed_usd_discount_codes.sql',import.meta.url),'utf8');
  await db.exec(sql.split('DO $patch$')[0]);
  const id='00000000-0000-0000-0000-000000000002';
  await db.exec(`INSERT INTO promotions(code,active,kind,amount_currency,amount_usd,channels,min_subtotal_cop) VALUES('USD116',true,'amount','USD',116,ARRAY['ecom_intl'],0);

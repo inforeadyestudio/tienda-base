@@ -16,6 +16,15 @@ Formato (la más reciente arriba):
 
 ---
 
+## 2026-11-21 — Ready Studio — Pruebas automáticas en GitHub y arreglo de 18 pruebas que no corrían
+- Cada vez que se sube algo (a cualquier rama), GitHub corre «Calidad» (`.github/workflows/calidad.yml` + `.github/calidad.sh`): compila, revisa tipos, corre las pruebas y revisa librerías con vulnerabilidades conocidas. El lint no corre aquí porque tarda más de 5 minutos.
+- 18 pruebas de base de datos (numeración de pedidos, descuentos, puntos, B2B, traslados, empaque y cambios) fallaban porque buscaban archivos SQL que no venían en el repo. Se copiaron a `db/pruebas/` (solo para pruebas; ver su README) y las pruebas apuntan ahí. En la numeración el prefijo es LU, igual que la base real. Lo que verifica cada prueba no cambió.
+- Las pruebas de reseñas (`review-media`) ahora corren con su configuración propia (`vitest.security.config.ts`).
+- Desde ahora las pruebas bloquean: si una falla, el check de GitHub queda en rojo.
+- En la tienda base el prefijo es LU (heredado de Lunee): al crear una marca nueva, cambiarlo en `db/pruebas/0051_b2b_order_number_channel.sql` y en `src/lib/order-number-database.test.js`.
+- Base de datos: no.
+- Pendiente: corregir el lint (avisos de `any` y formato) y pasarlo a bloqueante.
+
 ## 2026-11-12 — Ready Studio — Creación de la tienda base (sin marca, lista para Vercel)
 - Copia del sistema de una tienda en operación (tienda + admin + POS + B2B +
   lógica), **sin historial**, sin marca y sin depender de Lovable.

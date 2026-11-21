@@ -28,8 +28,8 @@ beforeEach(async () => {
     CREATE TABLE payment_attempts(id uuid DEFAULT gen_random_uuid(),reference text UNIQUE,provider text,currency text,amount numeric,status text,draft jsonb);
     CREATE TABLE reservations(hold_token uuid,order_id uuid,variant_id uuid,qty int,status text,expires_at timestamptz,location_id uuid,created_at timestamptz DEFAULT now());
     CREATE TABLE app_settings(key text,value jsonb); ALTER TABLE app_settings ENABLE ROW LEVEL SECURITY;`);
-  await db.exec(readFileSync(new URL("../../../drizzle/migrations/0068_storefront_signup_discount.sql", import.meta.url), "utf8"));
-  await db.exec(readFileSync(new URL("../../../drizzle/migrations/0070_fix_bold_guest_discount_before_reservation.sql", import.meta.url), "utf8"));
+  await db.exec(readFileSync(new URL("../../../db/pruebas/0068_storefront_signup_discount.sql", import.meta.url), "utf8"));
+  await db.exec(readFileSync(new URL("../../../db/pruebas/0070_fix_bold_guest_discount_before_reservation.sql", import.meta.url), "utf8"));
   await db.exec(`INSERT INTO promotions(code,kind,value,channels) VALUES ('BIENVENIDA-PRUEBA','percent',10,ARRAY['ecom_nacional']);
     INSERT INTO reservations(hold_token,variant_id,qty,status,expires_at,location_id) VALUES('${holdToken}','${variantId}',1,'active',now()+interval '12 minutes','${locationId}');`);
 }, 30000);

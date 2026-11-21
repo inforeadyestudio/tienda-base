@@ -26,7 +26,7 @@ it("setting a Preventa line to 0 from the B2B order removes the line and its quo
         ('00000000-0000-0000-0000-000000000030','00000000-0000-0000-0000-000000000050','00000000-0000-0000-0000-000000000040','pending',1,now()),
         ('00000000-0000-0000-0000-000000000031','00000000-0000-0000-0000-000000000050','00000000-0000-0000-0000-000000000041','pending',2,now());
     `);
-    const migration = readFileSync(new URL("../../drizzle/migrations/0076_fix_b2b_item_qty_zero_preventa.sql", import.meta.url), "utf8");
+    const migration = readFileSync(new URL("../../db/pruebas/0076_fix_b2b_item_qty_zero_preventa.sql", import.meta.url), "utf8");
     await db.exec(migration.replaceAll("public.", ""));
     await db.query("SELECT set_b2b_item_qty($1::uuid,$2::uuid,0)", ["00000000-0000-0000-0000-000000000020", "00000000-0000-0000-0000-000000000030"]);
     expect((await db.query("SELECT count(*)::int AS n FROM order_items WHERE id='00000000-0000-0000-0000-000000000030'")).rows[0].n).toBe(0);

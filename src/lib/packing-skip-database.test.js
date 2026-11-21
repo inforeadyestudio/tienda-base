@@ -20,7 +20,7 @@ beforeAll(async () => {
     CREATE TABLE public.packing_verifications(order_id uuid, scope text, skipped boolean, verified_by uuid, verified_at timestamptz, UNIQUE(order_id,scope));
     INSERT INTO public.user_roles VALUES ('${alejandra}','bodega'), ('${other}','bodega');
   `);
-  await db.exec(readFileSync(new URL("../../drizzle/migrations/0080_allow_warehouse_chief_packing_skip.sql", import.meta.url), "utf8"));
+  await db.exec(readFileSync(new URL("../../db/pruebas/0080_allow_warehouse_chief_packing_skip.sql", import.meta.url), "utf8"));
 }, 30000);
 afterAll(async () => { await db?.close(); });
 const signIn = async (id) => { await db.query("SELECT set_config('test.user', $1, false)", [id]); };

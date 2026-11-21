@@ -23,7 +23,7 @@ async function setup() {
       ('${V1}', '${ORIGIN}', 10, 3, now()),
       ('${V2}', '${ORIGIN}', 5, 0, now());
   `);
-  const migration = readFileSync(new URL("../../drizzle/migrations/0077_cancel_and_edit_transfers.sql", import.meta.url), "utf8");
+  const migration = readFileSync(new URL("../../db/pruebas/0077_cancel_and_edit_transfers.sql", import.meta.url), "utf8");
   await db.exec(migration.replaceAll("public.", ""));
   return db;
 }

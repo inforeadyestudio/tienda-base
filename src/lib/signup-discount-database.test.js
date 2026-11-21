@@ -13,7 +13,7 @@ it("inscribe una vez por correo y aplica 10% COP/USD sin descontar envío ni rep
       CREATE TABLE orders(id uuid,customer_id uuid,status text,currency text,source text,points_redeemed int,subtotal_cop bigint,shipping_cop bigint,total_cop bigint,total_usd numeric,total_usd_exact numeric,discount_cop bigint,discount_usd numeric DEFAULT 0,promotion_code text);
       CREATE TABLE order_items(order_id uuid,unit_price_usd numeric,qty int);
       CREATE TABLE app_settings(key text,value jsonb); ALTER TABLE app_settings ENABLE ROW LEVEL SECURITY;`);
-    await db.exec(readFileSync(new URL("../../drizzle/migrations/0068_storefront_signup_discount.sql", import.meta.url), "utf8"));
+    await db.exec(readFileSync(new URL("../../db/pruebas/0068_storefront_signup_discount.sql", import.meta.url), "utf8"));
     await db.exec(`INSERT INTO app_settings VALUES('signup_discount','{"enabled":true,"discountPct":10}');`);
     const subscribe = async (email) => (await db.query("select subscribe_signup_discount('Prueba',$1) code", [email])).rows[0].code;
     const code = await subscribe("PRUEBA@example.com");

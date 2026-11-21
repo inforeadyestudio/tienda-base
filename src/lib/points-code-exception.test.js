@@ -15,9 +15,9 @@ it('permite Juliana y JULIANACORTES30 una sola vez, bloquea otros casos y libera
  CREATE TABLE profiles(id uuid PRIMARY KEY);
  CREATE TABLE orders(id uuid PRIMARY KEY,customer_id uuid,promotion_code text,points_redeemed int,status text,payment_status text,source text,currency text);
  INSERT INTO profiles VALUES ('${customer}');`);
- const sql=readFileSync(new URL('../../drizzle/migrations/0058_scoped_points_code_exception.sql',import.meta.url),'utf8');
+ const sql=readFileSync(new URL('../../db/pruebas/0058_scoped_points_code_exception.sql',import.meta.url),'utf8');
  await db.exec(sql.split('DO $patch$')[0]);
- await db.exec(readFileSync(new URL('../../drizzle/migrations/0059_defer_points_exception_order_claim.sql',import.meta.url),'utf8'));
+ await db.exec(readFileSync(new URL('../../db/pruebas/0059_defer_points_exception_order_claim.sql',import.meta.url),'utf8'));
  await db.exec(`INSERT INTO points_code_exceptions(customer_id,code) VALUES('${customer}','JULIANACORTES30');`);
  async function insert(id, who=customer, code='JULIANACORTES30') {
   return db.query(`INSERT INTO orders VALUES($1,$2,$3,10000,'draft','pending','ecom','USD')`,[id,who,code]);

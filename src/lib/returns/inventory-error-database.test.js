@@ -17,10 +17,10 @@ CREATE TABLE order_fulfillments(order_id uuid,location_id uuid,unique(order_id,l
 CREATE TABLE promotions(id uuid,kind text,value int,channels text[]);
 CREATE TABLE returns(id uuid primary key default gen_random_uuid(),order_id uuid,location_id uuid,source text,kind text,status text,reason text,notes text,created_by uuid,resolved_by uuid,resolved_at timestamptz,items jsonb,desired text,desired_qty int,resolution text);
 CREATE TABLE audit_log(actor_id uuid,action text,entity text,entity_id uuid,diff jsonb);`);
-await db.exec(readFileSync(new URL('../../../drizzle/migrations/0050_inventory_error_multiple_replacements.sql', import.meta.url),'utf8'));
-await db.exec(readFileSync(new URL('../../../drizzle/migrations/0053_inventory_error_swap_not_duplicate_return.sql', import.meta.url),'utf8'));
+await db.exec(readFileSync(new URL('../../../db/pruebas/0050_inventory_error_multiple_replacements.sql', import.meta.url),'utf8'));
+await db.exec(readFileSync(new URL('../../../db/pruebas/0053_inventory_error_swap_not_duplicate_return.sql', import.meta.url),'utf8'));
 await db.exec('CREATE TRIGGER prevent_duplicate_return BEFORE INSERT OR UPDATE ON returns FOR EACH ROW EXECUTE FUNCTION prevent_duplicate_return()');
-await db.exec(readFileSync(new URL('../../../drizzle/migrations/0054_inventory_error_multiple_originals_and_usd_codes.sql', import.meta.url),'utf8'));
+await db.exec(readFileSync(new URL('../../../db/pruebas/0054_inventory_error_multiple_originals_and_usd_codes.sql', import.meta.url),'utf8'));
 const id=n=>`00000000-0000-0000-0000-${String(n).padStart(12,'0')}`;
 await db.query('insert into orders values($1,$2,$3,$4,200000,200000,44.20,44.20,now())',[id(10),'paid','COP','ecom']);
 for(const n of [20,21,22]) {

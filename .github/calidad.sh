@@ -56,11 +56,24 @@ case "$paso" in
       export VITE_SUPABASE_PROJECT_ID="${VITE_SUPABASE_PROJECT_ID:-prueba}"
     fi
     fallo=0
+    vt() { if tiene_dep vitest; then npx vitest "$@"; else npx --yes vitest@3 "$@"; fi; }
+    # Archivos que el repo prueba con una configuración propia (vitest.<algo>.config.*): se corren con ella y no con la general.
+    for cfg in vitest.*.config.ts vitest.*.config.js vitest.*.config.mjs; do
+      [ -f "$cfg" ] || continue
+      mapfile -t propios < <(vt list --filesOnly --config "$cfg" 2>/dev/null | sed "s#^$PWD/##" | grep -E '\.(test|spec)\.' || true)
+      [ ${#propios[@]} -gt 0 ] || continue
+      echo "▶ Vitest con $cfg: ${#propios[@]} archivos"
+      vt run --config "$cfg" || fallo=1
+      restantes=()
+      for f in "${vitest[@]}"; do
+        incluido=0; for p in "${propios[@]}"; do [ "$f" = "$p" ] && incluido=1; done
+        [ $incluido -eq 0 ] && restantes+=("$f")
+      done
+      vitest=("${restantes[@]}")
+    done
     if [ ${#vitest[@]} -gt 0 ]; then
       echo "▶ Vitest: ${#vitest[@]} archivos"
-      if tiene_dep vitest; then npx vitest run "${vitest[@]}" || fallo=1
-      else npx --yes vitest@3 run "${vitest[@]}" || fallo=1
-      fi
+      vt run "${vitest[@]}" || fallo=1
     fi
     if [ ${#bunt[@]} -gt 0 ]; then
       echo "▶ Bun test: ${#bunt[@]} archivos"

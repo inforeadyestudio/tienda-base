@@ -26,7 +26,7 @@ it("zero deletes the draft line and allocation, recalculates totals, and preserv
         ('00000000-0000-0000-0000-000000000031','00000000-0000-0000-0000-000000000021','00000000-0000-0000-0000-000000000040',1,100);
       INSERT INTO preventa_allocations VALUES ('00000000-0000-0000-0000-000000000030',1),('00000000-0000-0000-0000-000000000031',1);
     `);
-    const migration = readFileSync(new URL("../../drizzle/migrations/0071_b2b_client_stores.sql", import.meta.url), "utf8");
+    const migration = readFileSync(new URL("../../db/pruebas/0071_b2b_client_stores.sql", import.meta.url), "utf8");
     const start = migration.indexOf("CREATE OR REPLACE FUNCTION public.set_preventa_order_qty");
     const end = migration.indexOf("END; $function$;", start) + "END; $function$;".length;
     await db.exec(migration.slice(start, end));

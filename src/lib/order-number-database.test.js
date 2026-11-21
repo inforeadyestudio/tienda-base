@@ -11,7 +11,7 @@ beforeAll(async () => {
     CREATE TABLE orders(id uuid PRIMARY KEY DEFAULT gen_random_uuid(), number text UNIQUE,
       source text, b2b_mode text, is_manual boolean DEFAULT false, sold_by_location_id uuid);
   `);
-  await db.exec(readFileSync(new URL('../../drizzle/migrations/0051_b2b_order_number_channel.sql', import.meta.url), 'utf8'));
+  await db.exec(readFileSync(new URL('../../db/pruebas/0051_b2b_order_number_channel.sql', import.meta.url), 'utf8'));
   await db.exec(`CREATE TRIGGER assign_number BEFORE INSERT ON orders FOR EACH ROW EXECUTE FUNCTION assign_channel_order_number();`);
 }, 30000);
 afterAll(async () => { await db?.close(); });

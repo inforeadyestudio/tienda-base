@@ -23,7 +23,7 @@ env:
   BLOQUEA_BUILD: 'true'
   BLOQUEA_TIPOS: 'true'
   BLOQUEA_LINT: 'omitir'
-  BLOQUEA_TESTS: 'false'
+  BLOQUEA_TESTS: 'true'
 
 jobs:
   calidad:

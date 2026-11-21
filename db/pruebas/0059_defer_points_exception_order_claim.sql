@@ -1,0 +1,2 @@
+ALTER TABLE public.points_code_exceptions ALTER CONSTRAINT points_code_exceptions_claimed_order_id_fkey DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE public.points_code_exceptions ALTER CONSTRAINT points_code_exceptions_used_order_id_fkey DEFERRABLE INITIALLY DEFERRED;
