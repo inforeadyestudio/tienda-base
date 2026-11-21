@@ -15,6 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  # Más memoria para Node: algunos builds pasan de los 2 GB que trae por defecto.
+  NODE_OPTIONS: '--max-old-space-size=6144'
   # 'true'  = si falla, el check queda en rojo.
   # 'false' = solo informa (se dejó así porque hoy ya falla; cuando se arregle, cambiar a 'true').
   # 'omitir' = no se corre (solo para el lint en repos donde tarda más de 5 minutos).
